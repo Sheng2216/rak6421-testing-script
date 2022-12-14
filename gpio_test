@@ -1,0 +1,40 @@
+#!/bin/bash
+
+if [ $USER != "root" ]
+then
+    echo "please use root user to run!"
+    echo "e.g. sudo ./gpio_test"
+    exit
+fi
+
+gpioset gpiochip0 17=0 16=0 13=0 19=0
+# set gpiochip3 0 1 3 4 5 6 and 7 to output high
+#gpioset gpiochip3 0=1 1=1 3=1 4=1 5=1 6=1 7=1
+gpioset gpiochip0 17=1 16=1
+# 4. read gpiochip3 8 9 11 12 13 14 and 15 input status, should be 1 for all
+#echo "gpiochip3 8 9 11 12 13 14 and 15 input status: should be 1 for all" 
+#result3=$(gpioget gpiochip3 8 9 11 12 13 14 15)
+result3=$(gpioget gpiochip0 13 19)
+if [ "$result3" = "1 1" ] ; then
+    echo "GPIO Test 1 result: Succeed!"
+else
+    echo "GPIO Test 1 result: Failed"
+    exit
+fi
+echo " "
+
+# set gpiochip3 0 1 3 4 5 6 and 7 to output low
+#gpioset gpiochip3 0=0 1=0 3=0 4=0 5=0 6=0 7=0
+gpioset gpiochip0 17=0 16=0
+# 5. read gpiochip3 8 9 11 12 13 14 and 15 input status, should be 0 for all
+#echo "gpiochip3 8 9 11 12 13 14 and 15 input status: should be 0 for all" 
+#result4=$(gpioget gpiochip3 8 9 11 12 13 14 15)
+result4=$(gpioget gpiochip0 13 19)
+if [ "$result4" = "0 0" ] ; then
+    echo "GPIO Test 2 result: Succeed!"
+else
+    echo "GPIO Test 2 result: Failed"
+    exit
+fi
+echo " "
+
